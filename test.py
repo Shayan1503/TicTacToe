@@ -2,8 +2,8 @@
 To test runtime and AI logic
 """
 import random
-from Player import AI
-from Visual import Board
+from player import AI
+from visual import Board
 import timeit
 
 
