@@ -3,7 +3,7 @@ Player interface and its subclasses for the Tic-Tac-Toe game
 """
 import math
 from abc import abstractmethod
-from Visual import Board
+from visual import Board
 import random
 import copy
 
