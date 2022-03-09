@@ -1,8 +1,8 @@
 """
 A simple Tic-Tac-Toe game
 """
-from Player import User, AI
-from Visual import Board
+from player import User, AI
+from visual import Board
 
 
 Winner = ""
