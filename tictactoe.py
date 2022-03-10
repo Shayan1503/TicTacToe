@@ -1,6 +1,7 @@
 """
 A simple Tic-Tac-Toe game
 """
+import time
 from player import User, AI
 from visual import Board
 
