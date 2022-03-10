@@ -1,7 +1,6 @@
 """
 A simple Tic-Tac-Toe game
 """
-import time
 from player import User, AI
 from visual import Board
 
@@ -107,4 +106,4 @@ def winner(final_board, comp, user):
 
 if __name__ == "__main__":
     game()
-    time.sleep(1000)
+    input()
