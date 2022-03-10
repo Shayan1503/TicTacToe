@@ -107,3 +107,4 @@ def winner(final_board, comp, user):
 
 if __name__ == "__main__":
     game()
+    time.sleep(1000)
