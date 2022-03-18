@@ -6,7 +6,6 @@ from player import AI
 from board import Board
 import timeit
 
-
 Winner = ""
 record = {
     "won": 0,
@@ -18,14 +17,23 @@ record = {
 # driver method
 # player1 goes first, player2 goes second
 def play(board, player1, player2):
+    global Winner
     while True:
 
         turn(board, player1)
-        if winner_exists(board) or not board.moves_available():
+        if board.isWinner(player1.shape):
+            Winner = player1.shape
+            break
+        elif not board.movesAvailable():
+            Winner = ""
             break
 
         turn(board, player2)
-        if winner_exists(board) or not board.moves_available():
+        if board.isWinner(player1.shape):
+            Winner = player2.shape
+            break
+        elif not board.movesAvailable():
+            Winner = ""
             break
 
 
@@ -33,54 +41,11 @@ def play(board, player1, player2):
 def turn(board, player):
     if player.shape == 'X':
         move = player.move()
-        if board.legal_move(move):
-            board.update_board(move, player.shape)
+        if board.legalMove(move):
+            board.update(move, player.shape)
     else:
         move = random.choice(board.state["available_moves"])
-        board.update_board(move, player.shape)
-
-
-# returns True when there is a winner in the current state of the game
-def winner_exists(current_board):
-    global Winner
-    board = current_board.board
-    # checking horizontal win
-    for row in board:
-        current_row = "".join(row)
-        if current_row == "XXX" or current_row == "OOO":
-            Winner = current_row
-            return True
-
-    # checking vertical win
-    for col in range(3):
-        current_col = "".join((board[0][col], board[1][col], board[2][col]))
-        if current_col == "XXX" or current_col == "OOO":
-            Winner = current_col
-            return True
-
-    # checking diagonal win
-    diag1 = "".join((board[0][0], board[1][1], board[2][2]))
-    diag2 = "".join((board[0][2], board[1][1], board[2][0]))
-
-    if diag1 == "XXX" or diag1 == "OOO":
-        Winner = diag1
-        return True
-    elif diag2 == "XXX" or diag2 == "OOO":
-        Winner = diag2
-        return True
-
-    return False
-
-
-# printing the winner
-def winner(final_board, player1, player2):
-    if winner_exists(final_board):
-        if player1.shape in Winner:
-            record["won"] += 1
-        elif player2.shape in Winner:
-            record["lose"] += 1
-    else:
-        record["tie"] += 1
+        board.update(move, player.shape)
 
 
 number_test = int(input("Enter how many tests you want to do: "))
@@ -92,7 +57,12 @@ for test in range(0, number_test):
 
     play(board, player1, player2)
 
-    winner(board, player1, player2)
+    if player1.shape == Winner:
+        record["won"] += 1
+    elif player2.shape == Winner:
+        record["lose"] += 1
+    else:
+        record["tie"] += 1
 
 end = timeit.default_timer()
 won = record["won"]
