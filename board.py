@@ -1,5 +1,5 @@
 """
-Board layout for the Tic-Tac-Toe game
+Board layout for the game
 """
 import math
 
