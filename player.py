@@ -46,11 +46,6 @@ class AI(Player):
         super().__init__(shape, score)
         self.board = board
 
-    # purely random move from computer; old move method
-    # def move(self):
-    #     moves_available = self.board.state["available_moves"]
-    #     return random.choice(moves_available)
-
     # optimal move from computer; uses minimax algorithm
     def move(self):
         if len(self.board.state["available_moves"]) == 9:
