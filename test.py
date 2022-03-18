@@ -3,7 +3,7 @@ To test runtime and AI logic
 """
 import random
 from player import AI
-from visual import Board
+from board import Board
 import timeit
 
 
