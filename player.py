@@ -1,9 +1,8 @@
 """
-Player interface and its subclasses for the Tic-Tac-Toe game
+Player interface and its subclasses for the game
 """
 import math
 from abc import abstractmethod
-from visual import Board
 import random
 import copy
 
@@ -47,7 +46,7 @@ class AI(Player):
         super().__init__(shape, score)
         self.board = board
 
-    # purely random move from computer
+    # purely random move from computer; old move method
     # def move(self):
     #     moves_available = self.board.state["available_moves"]
     #     return random.choice(moves_available)
@@ -68,12 +67,12 @@ class AI(Player):
         curr_board = copy.deepcopy(board)
 
         # termination state
-        if self.is_winner(human, curr_board):
+        if self.isWinner(human, curr_board):
             return {
                 "move_position": None,
                 "weight": -1
             }
-        elif self.is_winner(ai, curr_board):
+        elif self.isWinner(ai, curr_board):
             return {
                 "move_position": None,
                 "weight": 1
@@ -88,19 +87,18 @@ class AI(Player):
         if player == ai:
             best = {
                 "move_position": None,
-                "weight": -math.inf
+                "weight": -math.inf  # need to maximize weight
             }
         else:
             best = {
                 "move_position": None,
-                "weight": math.inf
+                "weight": math.inf  # need to minimize weight
             }
 
         # going through all the possible moves
         curr_info = {}
         available_moves = copy.deepcopy(curr_board.state["available_moves"])
         for move in available_moves:
-            # curr_info = {}
             curr_board.update_board(move, player)
 
             if player == ai:
@@ -110,6 +108,7 @@ class AI(Player):
             curr_info["weight"] = result["weight"]
             curr_info["move_position"] = move
 
+            # undoing the move
             curr_board = copy.deepcopy(board)
 
             # choosing the best move
@@ -125,7 +124,7 @@ class AI(Player):
     # return True if the given player is a winner
     # better method of finding winner may exist; look further into it
     # using 'in' to reduce runtime
-    def is_winner(self, player, board):
+    def isWinner(self, player, board):
         if player == 'X':
             moves = board.state["X_moves"]
         else:
