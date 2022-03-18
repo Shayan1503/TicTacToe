@@ -56,28 +56,27 @@ class AI(Player):
         if len(self.board.state["available_moves"]) == 9:
             return random.choice(self.board.state["available_moves"])
         else:
-            optimal_move = self.minimax(self.shape, self.board)["move_position"]
+            optimal_move = self.minimax(self.shape, self.board, -math.inf, math.inf)["move_position"]
             return optimal_move
 
-    # minimax algorithm for tictactoe ai
-    def minimax(self, player, board):
+    # minimax algorithm for ai with alpha-beta pruning
+    def minimax(self, player, board, alpha, beta):
         # setting things up
         ai = self.shape
         human = 'X' if ai == 'O' else 'O'
-        curr_board = copy.deepcopy(board)
 
         # termination state
-        if self.isWinner(human, curr_board):
+        if board.isWinner(human):
             return {
                 "move_position": None,
                 "weight": -1
             }
-        elif self.isWinner(ai, curr_board):
+        elif board.isWinner(ai):
             return {
                 "move_position": None,
                 "weight": 1
             }
-        elif not curr_board.moves_available():
+        elif not board.movesAvailable():
             return {
                 "move_position": None,
                 "weight": 0
@@ -97,54 +96,33 @@ class AI(Player):
 
         # going through all the possible moves
         curr_info = {}
-        available_moves = copy.deepcopy(curr_board.state["available_moves"])
+        available_moves = copy.deepcopy(board.state["available_moves"])
         for move in available_moves:
-            curr_board.update_board(move, player)
+            board.update(move, player)
 
             if player == ai:
-                result = self.minimax(human, curr_board)
+                result = self.minimax(human, board, alpha, beta)
             else:
-                result = self.minimax(ai, curr_board)
+                result = self.minimax(ai, board, alpha, beta)
             curr_info["weight"] = result["weight"]
             curr_info["move_position"] = move
 
             # undoing the move
-            curr_board = copy.deepcopy(board)
+            board.undo(move, player)
 
             # choosing the best move
             if player == ai:
                 if curr_info["weight"] > best["weight"]:
                     best = copy.deepcopy(curr_info)
+                if result["weight"] > alpha:
+                    alpha = result["weight"]
+                if alpha >= beta:
+                    break
             else:
                 if curr_info["weight"] < best["weight"]:
                     best = copy.deepcopy(curr_info)
-
+                if result["weight"] < beta:
+                    beta = result["weight"]
+                if alpha >= beta:
+                    break
         return best
-
-    # return True if the given player is a winner
-    # better method of finding winner may exist; look further into it
-    # using 'in' to reduce runtime
-    def isWinner(self, player, board):
-        if player == 'X':
-            moves = board.state["X_moves"]
-        else:
-            moves = board.state["O_moves"]
-
-        # checking horizontal win
-        if (0 in moves and 1 in moves and 2 in moves) or \
-                (3 in moves and 4 in moves and 5 in moves) or \
-                (6 in moves and 7 in moves and 8 in moves):
-            return True
-
-        # checking vertical win
-        if (0 in moves and 3 in moves and 6 in moves) or \
-                (1 in moves and 4 in moves and 7 in moves) or \
-                (2 in moves and 5 in moves and 8 in moves):
-            return True
-
-        # checking diagonal win
-        if (0 in moves and 4 in moves and 8 in moves) or \
-                (2 in moves and 4 in moves and 6 in moves):
-            return True
-
-        return False
