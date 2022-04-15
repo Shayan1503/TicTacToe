@@ -22,7 +22,6 @@ class GUI:
         self.createButtons()
 
         self.root.title("Tic Tac Toe")
-        self.root.iconbitmap(r"tic-tac-toe.ico")
         self.root.mainloop()
 
     def createButtons(self):
