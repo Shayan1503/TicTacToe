@@ -6,3 +6,5 @@ Run `game.exe` (for Windows) or `game` (for macOS) to play the game and `test.ex
 to run tests on the AI. These files can be found in [Executables](.\Executables).
 
 Credit to the app icon: [Tic tac toe icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/tic-tac-toe) 
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Shayan1503&repo=TicTacToe&theme=react)](https://github.com/Shayan1503/TicTacToe)
