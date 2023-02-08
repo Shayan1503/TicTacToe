@@ -2,7 +2,7 @@
 GUI for the game
 """
 import sys
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 import math
 from player import AI
@@ -11,8 +11,8 @@ from board import Board
 
 class GUI:
     def __init__(self):
-        self.root = Tk()
-        self.frame = Frame(self.root)
+        self.root = tk.Tk()
+        self.frame = tk.Frame(self.root)
         self.buttons = []
         self.board = Board()
         self.ai = AI('O', 0, self.board)
@@ -20,25 +20,24 @@ class GUI:
     def start(self):
         self.frame.pack()
         self.createButtons()
-
         self.root.title("Tic Tac Toe")
         self.root.mainloop()
 
     def createButtons(self):
         for position in range(0, 9):
-            button = Button(self.frame, bg="#30b8b3", text=" ", font=("Helvetica", 25),
+            button = tk.Button(self.frame, bg="#30b8b3", text=" ", font=("Helvetica", 25),
                             height=2, width=4, command=lambda move=position: self.click(move))
             button.grid(row=math.floor(position / 3), column=position % 3)
             self.buttons.append(button)
 
     def click(self, move):
-        self.buttons[move].config(text='X', state=DISABLED, bg="#3bd1c7",
+        self.buttons[move].config(text='X', state=tk.DISABLED, bg="#3bd1c7",
                                   disabledforeground='red', relief='sunken')
         self.board.update(move, 'X')
 
         if self.board.movesAvailable():
             move = self.ai.move()
-            self.buttons[move].config(text='O', state=DISABLED, bg="#3bd1c7",
+            self.buttons[move].config(text='O', state=tk.DISABLED, bg="#3bd1c7",
                                       disabledforeground='blue', relief='sunken')
             self.board.update(move, 'O')
 
@@ -49,9 +48,16 @@ class GUI:
 
     def endScreen(self, message):
         retry = messagebox.askyesno(title="Game over", message=message+"\nWant to play again?")
-        self.root.destroy()
+
         if retry:
-            GUI().start()
+            self.refresh()
+        else:
+            self.root.destroy()
+
+    def refresh(self):
+        for position in range(0, 9):
+            self.buttons[position].config(bg="#30b8b3", text=" ", state=tk.NORMAL, relief='raised')
+        self.board.renew()
 
 
 if __name__ == '__main__':
