@@ -66,3 +66,8 @@ class Board:
         else:
             state["O_moves"].remove(move)
         state["available_moves"].append(move)
+
+    def renew(self):
+        self.state["available_moves"] = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        self.state["X_moves"] = []
+        self.state["O_moves"] = []
